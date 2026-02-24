@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.4'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'ai.codism'
+version = '1.0.0-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom 'io.modelcontextprotocol.sdk:mcp-bom:0.12.1'
+    }
+}
+
+dependencies {
+    // Spring Boot (no web - stdio only)
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // PostgreSQL
+    runtimeOnly 'org.postgresql:postgresql'
+
+    // MCP SDK (core - includes stdio transport)
+    implementation 'io.modelcontextprotocol.sdk:mcp'
+
+    // Lombok
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // MapStruct
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.projectlombok:lombok-mapstruct-binding:0.2.0'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+    // Jackson (for MCP JSON)
+    implementation 'com.fasterxml.jackson.core:jackson-databind'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// fat jar for MCP server
+tasks.named('bootJar') {
+    archiveFileName = 'claude-memory-mcp-standalone.jar'
+}

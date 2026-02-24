@@ -1,0 +1,32 @@
+spring:
+  main:
+    web-application-type: none
+    banner-mode: off
+    log-startup-info: false
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/claude_memory}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: false
+    show-sql: false
+    open-in-view: false
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema-init.sql
+
+ollama:
+  url: ${OLLAMA_URL:http://localhost:11434}
+  model: ${OLLAMA_MODEL:nomic-embed-text}
+
+logging:
+  level:
+    root: WARN
+    ai.codism: INFO
